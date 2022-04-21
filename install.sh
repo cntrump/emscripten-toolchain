@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -eux
 
 prefix=$1
 [ -z ${prefix} ] && prefix=/opt/local
@@ -8,7 +8,7 @@ prefix=$1
 toolchain=emsdk
 
 version_emscripten=3.0.0
-version_binaryen=105
+version_binaryen=102
 version_llvm=14.0.1
 version_nodejs=16.14.2
 
@@ -126,6 +126,8 @@ JAVA = 'java' # executable
 #
 # FROZEN_CACHE = True # never clears the cache, and disallows building to the cache
 EOF
+
+set +ux
 
 cat <<EOF
 

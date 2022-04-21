@@ -5,7 +5,7 @@
 Included:
 - Emscripten: `3.0.0`
 - LLVM: `14.0.1`
-- binaryen: `105`
+- binaryen: `102`
 - NodeJS: `16.14.2`
 
 ## How to install
