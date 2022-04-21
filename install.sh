@@ -49,7 +49,10 @@ function install_nodejs() {
   sudo ln -sf ../lib/node_modules/npm/bin/npm-cli.js npm
   sudo ln -sf ../lib/node_modules/npm/bin/npx-cli.js npx
   # enable corepack
+  local temp_path=$PATH
+  PATH=${prefix}/${toolchain}/nodejs/bin:${PATH}
   sudo ./corepack enable
+  PATH=${temp_path}
   popd
   popd
 }
@@ -126,6 +129,11 @@ JAVA = 'java' # executable
 #
 # FROZEN_CACHE = True # never clears the cache, and disallows building to the cache
 EOF
+
+pushd ${EMSCRIPTEN_ROOT}
+PATH=$(dirname ${NODE_JS}):${PATH}
+sudo yarn add acorn html-minifier-terser
+popd
 
 set +ux
 

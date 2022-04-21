@@ -65,22 +65,14 @@ Visit http://127.0.0.1:8000/ , You will see `Hello World!` printed.
 
 ### Build release version
 
-Install `acorn`:
-
-```bash
-yarn global add acorn
-```
-
-Install `html-minifier-terser` in `Emscripten` root directory:
-
-```bash
-cd /opt/local/emsdk/emscripten
-sudo yarn add html-minifier-terser
-```
-
 Build `main.c` with `-Os` option:
 
 ```bash
-NODE_PATH=~/.config/yarn/global/node_modules \
 emcc -Os main.c -s EXIT_RUNTIME=1 -o index.html
+```
+
+### Clear cache
+
+```bash
+emcc --clear-cache
 ```
