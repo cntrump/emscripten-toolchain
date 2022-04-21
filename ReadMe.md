@@ -76,3 +76,32 @@ emcc -Os main.c -s EXIT_RUNTIME=1 -o index.html
 ```bash
 emcc --clear-cache
 ```
+
+### Build with CMake and Ninja
+
+CMakeLists.txt
+
+```
+cmake_minimum_required(VERSION 3.10.2)
+
+project(sample C)
+
+set(CMAKE_EXECUTABLE_SUFFIX ".html")
+set(CXX_STANDARD 14)
+
+if(NOT CMAKE_BUILD_TYPE)
+  message(STATUS "No build type selected, default to Release")
+  set(CMAKE_BUILD_TYPE "Release")
+endif()
+
+add_executable(sample main.c)
+
+set_target_properties(sample PROPERTIES LINK_FLAGS "-s EXIT_RUNTIME=1")
+```
+
+Configure and Build:
+
+```bash
+emcmake cmake -S . -B build -G Ninja
+emmake ninja -C build
+```
