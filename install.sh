@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
-set -eux
+set -eu
 
 prefix=$1
 [ -z ${prefix} ] && prefix=/opt/local
 
 toolchain=emsdk
 
+version_emscripten=3.0.0
 version_binaryen=105
 version_llvm=14.0.1
+version_nodejs=16.14.2
+
+./checkout-emscripten.sh ${version_emscripten}
 
 prebuilt_binaryen=binaryen-${version_binaryen}-universal-apple-darwin.tar.xz
 prebuilt_llvm=llvm-${version_llvm}-universal-apple-darwin.tar.xz
@@ -27,6 +31,31 @@ if [ ! -d ${prefix}/${toolchain} ]; then
   sudo mkdir -p ${prefix}/${toolchain}
 fi
 
+function install_nodejs() {
+  if [ ! -f "node-v${version_nodejs}.pkg" ]; then
+    curl -OL https://nodejs.org/dist/v${version_nodejs}/node-v${version_nodejs}.pkg
+  fi
+
+  [ -d ${prefix}/${toolchain}/nodejs ] && sudo rm -rf ${prefix}/${toolchain}/nodejs
+  sudo mkdir -p ${prefix}/${toolchain}/nodejs
+
+  [ -d node-v${version_nodejs} ] && sudo rm -rf node-v${version_nodejs}
+  pkgutil --expand-full node-v${version_nodejs}.pkg node-v${version_nodejs}
+  pushd node-v${version_nodejs}
+  sudo cp -a ./node-v16.14.2.pkg/Payload/usr/local/* ${prefix}/${toolchain}/nodejs
+  # install npm
+  sudo cp -a ./npm-v8.5.0.pkg/Payload/usr/local/* ${prefix}/${toolchain}/nodejs
+  pushd ${prefix}/${toolchain}/nodejs/bin
+  sudo ln -sf ../lib/node_modules/npm/bin/npm-cli.js npm
+  sudo ln -sf ../lib/node_modules/npm/bin/npx-cli.js npx
+  # enable corepack
+  sudo ./corepack enable
+  popd
+  popd
+}
+
+install_nodejs
+
 [ -d ${prefix}/${toolchain}/llvm ] && sudo rm -rf ${prefix}/${toolchain}/llvm
 sudo mkdir -p ${prefix}/${toolchain}/llvm
 sudo tar -xvf ${prebuilt_llvm} -C ${prefix}/${toolchain}/llvm
@@ -36,7 +65,13 @@ sudo mkdir -p ${prefix}/${toolchain}/binaryen
 sudo tar -xvf ${prebuilt_binaryen} -C ${prefix}/${toolchain}/binaryen
 
 [ -d ${prefix}/${toolchain}/emscripten ] && sudo rm -rf ${prefix}/${toolchain}/emscripten
-sudo cp -r emscripten ${prefix}/${toolchain}/
+sudo cp -a emscripten ${prefix}/${toolchain}/
+
+# generate emscripten_configuration
+EMSCRIPTEN_ROOT="${prefix}/${toolchain}/emscripten"
+LLVM_ROOT="${prefix}/${toolchain}/llvm/bin"
+BINARYEN_ROOT="${prefix}/${toolchain}/binaryen"
+NODE_JS="${prefix}/${toolchain}/nodejs/bin/node"
 
 cat <<EOF > ~/.emscripten
 # Note: If you put paths relative to the home directory, do not forget
@@ -52,14 +87,14 @@ cat <<EOF > ~/.emscripten
 
 # This is used by external projects in order to find emscripten.  It is not used
 # by emscripten itself.
-EMSCRIPTEN_ROOT = '${prefix}/${toolchain}/emscripten' # directory
+EMSCRIPTEN_ROOT = '${EMSCRIPTEN_ROOT}' # directory
 
-LLVM_ROOT = '${prefix}/${toolchain}/llvm/bin' # directory
-BINARYEN_ROOT = '${prefix}/${toolchain}/binaryen' # directory
+LLVM_ROOT = '${LLVM_ROOT}' # directory
+BINARYEN_ROOT = '${BINARYEN_ROOT}' # directory
 
 # Location of the node binary to use for running the JS parts of the compiler.
 # This engine must exist, or nothing can be compiled.
-NODE_JS = '$(which node)' # executable
+NODE_JS = '${NODE_JS}' # executable
 
 JAVA = 'java' # executable
 
@@ -90,4 +125,17 @@ JAVA = 'java' # executable
 # Other options
 #
 # FROZEN_CACHE = True # never clears the cache, and disallows building to the cache
+EOF
+
+cat <<EOF
+
+====== Install finised ======
+  Created: ~/.emscripten
+  EMSCRIPTEN_ROOT="${EMSCRIPTEN_ROOT}"
+  LLVM_ROOT="${LLVM_ROOT}"
+  BINARYEN_ROOT="${BINARYEN_ROOT}"
+  NODE_JS="${NODE_JS}"
+=============================
+
+You need add ${EMSCRIPTEN_ROOT} to PATH manually.
 EOF

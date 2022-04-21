@@ -6,17 +6,9 @@ Included:
 - Emscripten: `3.0.0`
 - LLVM: `14.0.1`
 - binaryen: `105`
-
-Requried preinstall:
-- [NodeJS](https://nodejs.org/)
+- NodeJS: `16.14.2`
 
 ## How to install
-
-Checkout latest Emscripten:
-
-```bash
-./checkout-emscripten.sh 3.0.0
-```
 
 Install toolchain:
 
@@ -34,6 +26,7 @@ export PATH=/opt/local/emsdk/emscripten:$PATH
 
 Requried preinstall:
 
+- Xcode or [Command Line Tools For Xcode](https://developer.apple.com/download/all/)
 - [CMake](https://cmake.org/)
 - [Ninja](https://ninja-build.org/)
 
