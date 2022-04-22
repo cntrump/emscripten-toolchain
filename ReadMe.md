@@ -3,9 +3,9 @@
 [Emscripten](https://emscripten.org/) toolchain for macOS.
 
 Included:
-- Emscripten: `3.0.0`
+- Emscripten: `3.1.7`
 - LLVM: `14.0.1`
-- binaryen: `102`
+- binaryen: `105`
 - NodeJS: `16.14.2`
 
 ## How to install toolchain
