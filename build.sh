@@ -2,9 +2,9 @@
 
 set -eux
 
-version_emscripten=3.0.0
+version_emscripten=3.1.3
 version_binaryen=105
-version_llvm=14.0.1
+version_llvm=14.0.3
 
 ./checkout-binaryen.sh ${version_binaryen}
 ./checkout-llvm.sh ${version_llvm}

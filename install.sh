@@ -9,7 +9,7 @@ toolchain=emsdk
 
 version_emscripten=3.1.3
 version_binaryen=105
-version_llvm=14.0.1
+version_llvm=14.0.3
 version_nodejs=16.14.2
 
 ./checkout-emscripten.sh ${version_emscripten}
