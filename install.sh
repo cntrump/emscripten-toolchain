@@ -7,7 +7,7 @@ prefix=$1
 
 toolchain=emsdk
 
-version_emscripten=3.1.3
+version_emscripten=3.1.10
 version_binaryen=105
 version_llvm=14.0.3
 version_nodejs=16.14.2
@@ -69,6 +69,8 @@ sudo tar -xvf ${prebuilt_binaryen} -C ${prefix}/${toolchain}/binaryen
 
 [ -d ${prefix}/${toolchain}/emscripten ] && sudo rm -rf ${prefix}/${toolchain}/emscripten
 sudo cp -a emscripten ${prefix}/${toolchain}/
+
+sudo sed -i'.bak' 's/EXPECTED_LLVM_VERSION = "15.0"/EXPECTED_LLVM_VERSION = "14.0"/g' ${prefix}/${toolchain}/emscripten/tools/shared.py
 
 # generate emscripten_configuration
 EMSCRIPTEN_ROOT="${prefix}/${toolchain}/emscripten"
