@@ -2,7 +2,7 @@
 
 set -eux
 
-version_emscripten=3.1.10
+version_emscripten=3.1.11
 version_binaryen=105
 version_llvm=14.0.3
 

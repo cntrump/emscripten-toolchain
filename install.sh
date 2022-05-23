@@ -7,7 +7,7 @@ prefix=$1
 
 toolchain=emsdk
 
-version_emscripten=3.1.10
+version_emscripten=3.1.11
 version_binaryen=105
 version_llvm=14.0.3
 version_nodejs=16.14.2
