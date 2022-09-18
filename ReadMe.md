@@ -3,8 +3,8 @@
 [Emscripten](https://emscripten.org/) toolchain for macOS.
 
 Included:
-- Emscripten: `3.1.7`
-- LLVM: `14.0.1`
+- Emscripten: `3.1.21`
+- LLVM: `14.0.6`
 - binaryen: `105`
 - NodeJS: `16.14.2`
 
