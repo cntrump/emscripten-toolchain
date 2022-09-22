@@ -4,7 +4,7 @@ set -eux
 
 version_emscripten=3.1.22
 version_binaryen=105
-version_llvm=15.0.0
+version_llvm=15.0.1
 
 ./checkout-binaryen.sh ${version_binaryen}
 ./checkout-llvm.sh ${version_llvm}
