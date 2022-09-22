@@ -7,9 +7,9 @@ prefix=$1
 
 toolchain=emsdk
 
-version_emscripten=3.1.21
+version_emscripten=3.1.22
 version_binaryen=105
-version_llvm=14.0.6
+version_llvm=15.0.0
 version_nodejs=16.14.2
 
 ./checkout-emscripten.sh ${version_emscripten}
